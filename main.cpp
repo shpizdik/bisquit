@@ -142,6 +142,21 @@ int main(){
 
 
 
+		//Texture parameters and loading
+		//------------------------------
+		GLfloat textureCords[] = {
+			0.0f, 0.0f,
+			1.0f, 0.0f, 
+			0.5f, 1.0f
+		};
+
+		// glTexParameteri(GL_TEXTURE_2D, GL_WRAP_S GL_CLAMP_TO_BORDER);
+		// glTexParameteri(GL_TEXTURE_2D, GL_WRAP_T, GL_CLAMP_TO_BORDER);
+		// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+
+
+		//todo: write and image loader myself and delete the fuck outta SOIL
+
 
 
 	//main loop
