@@ -146,41 +146,54 @@ int main(){
 
 
 
-		//Texture parameters and loading
-		//------------------------------
-		GLfloat textureCords[] = {
-			0.0f, 0.0f,
-			1.0f, 0.0f, 
-			0.5f, 1.0f
-		};
+	//Texture parameters and loading
+	//------------------------------
+	GLfloat textureCords[] = {
+		0.0f, 0.0f,
+		1.0f, 0.0f, 
+		0.5f, 1.0f
+	};
 
-		// glTexParameteri(GL_TEXTURE_2D, GL_WRAP_S GL_CLAMP_TO_BORDER);
-		// glTexParameteri(GL_TEXTURE_2D, GL_WRAP_T, GL_CLAMP_TO_BORDER);
-		// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+	//todo: write and image loader myself and delete the fuck outta stbi
+
+	//generating texture
+	GLuint texture;
+	glGenTextures (1, &texture);
+
+	//binding wtf
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	//setting parameteri
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+
+	//loading image
+	int width, height, channels;
+	unsigned char* image = stbi_load("test.dds", &width, &height, &channels, 4);
+
+	//natyagivanie
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	//freeing
+	stbi_image_free(image);
+	glBindTexture(GL_TEXTURE_2D, 0);
 
 
-		//todo: write and image loader myself and delete the fuck outta SOIL
-
+	//Applying texture
+	//----------------
+	
 
 
 	//main loop
+	//---------
 	while (!glfwWindowShouldClose(window)){
 		if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 			glfwSetWindowShouldClose(window, true);
 
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-
-		// //Legacy OpenGL triangle render
-		// //-----------------------------
-		// glBegin(GL_TRIANGLES);
-		// glVertex2f(-0.5f, -0.5f);
-		// glVertex2f(0.0f, -0.5f);
-		// glVertex2f(0.5f, -0.5f);
-		// glEnd();
-		// //-----------------------------
-		// //note: it doesn't fucking work, gotta find out why
-		// //i'll leave these 5 lines here for possible reference
 
 		//doing some sneaky shader stuff
 		glBindVertexArray(VAO);
