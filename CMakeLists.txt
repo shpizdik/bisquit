@@ -3,8 +3,8 @@ project(BisquitExec)
 
 add_executable(BisquitExec main.cpp)
 
-add_subdirectory(glfw)
-add_subdirectory(glad)
+add_subdirectory(third_party/glad)
+add_subdirectory(third_party/glfw)
 
 target_link_libraries(BisquitExec PRIVATE glad glfw)
 

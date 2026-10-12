@@ -39,11 +39,8 @@ int main(){
 	glViewport(0, 0, PRM_WIDTH, PRM_HEIGHT);
 
 
-
-
-
 		//making a triangle
-		//-----------------
+		//-----------------		
 		float vertices[] = {
 			// positions		// colors
 			0.7f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
@@ -84,8 +81,8 @@ int main(){
 		
 		try{
 			// opening files
-			vShaderFile.open("shaders/shader.vert");
-			fShaderFile.open("shaders/shader.frag");
+			vShaderFile.open("assets/shaders/shader.vert");
+			fShaderFile.open("assets/shaders/shader.frag");
 			std::stringstream vShaderStream, fShaderStream;
 			//read file's buffer contents into stream
 			vShaderStream << vShaderFile.rdbuf();
