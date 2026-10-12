@@ -6,6 +6,10 @@
 #include <iostream>
 #include <sstream>
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
+
 const int PRM_WIDTH = 856;
 const int PRM_HEIGHT = 480;
 
