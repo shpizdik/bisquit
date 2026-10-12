@@ -7,7 +7,7 @@
 #include <sstream>
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#include "third_party/stb_image.h"
 
 
 const int PRM_WIDTH = 856;
