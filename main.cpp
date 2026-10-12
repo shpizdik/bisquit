@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <sstream>
+#include "bisqHelloTriangle/hello_triangle.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "third_party/stb_image.h"
@@ -14,6 +15,8 @@ const int PRM_WIDTH = 856;
 const int PRM_HEIGHT = 480;
 
 int main(){
+	PrintZaebisIfWorks();
+	
 	//GLFW initialization & window creation
 	//-------------------------------------
 	glfwInit();
