@@ -3,11 +3,15 @@ project(BisquitExec)
 
 add_executable(BisquitExec main.cpp)
 
+#third party libs
 add_subdirectory(third_party/glad)
 add_subdirectory(third_party/glfw)
+add_subdirectory(third_party/glm)
+
+#first party libs
 add_subdirectory(bisqHelloTriangle)
 
-target_link_libraries(BisquitExec PRIVATE glad glfw hello_triangle)
+target_link_libraries(BisquitExec PRIVATE glad glfw glm hello_triangle)
 
 
 if(APPLE)
