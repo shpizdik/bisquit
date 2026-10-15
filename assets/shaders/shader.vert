@@ -7,9 +7,11 @@ layout (location = 2) in vec2 VertexTexCoord;
 out vec3 ourColor;
 out vec2 TexCoord;
 
+uniform float scr_aspect;
+
 void main()
 {
-    gl_Position = vec4(VertexPos, 1.0);
+    gl_Position = vec4(VertexPos.x*scr_aspect, VertexPos.yz, 1.0);
     ourColor = VertexColor;
     TexCoord = VertexTexCoord;
 }

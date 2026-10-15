@@ -201,9 +201,13 @@ int main(){
 
     	glUseProgram(shaderProgram);
 
+    	glBindVertexArray(VAO);
+
+    	int uni_loc = glGetUniformLocation(shaderProgram, "scr_aspect");
+    	glUniform1f(uni_loc, (float)PRM_HEIGHT / PRM_WIDTH); 
+
     	glBindTexture(GL_TEXTURE_2D, texture);
 
-    	glBindVertexArray(VAO);
     	glDrawArrays(GL_TRIANGLES, 0, 3);
 
     	glfwSwapBuffers(window);
