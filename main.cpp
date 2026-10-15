@@ -42,14 +42,14 @@ int main(){
 	glViewport(0, 0, PRM_WIDTH, PRM_HEIGHT);
 
 
-		//making a triangle
-		//-----------------		
-		float vertices[] = {
-			// positions		// colors
-			0.7f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
-			-0.7f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
-			0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f
-		};
+	//making a triangle
+	//-----------------		
+	float vertices[] = {
+		 // positions		  // colors           //texture cords
+		 0.7f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
+		-0.7f, -0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 0.0f, 0.0f,
+		 0.0f,  0.5f,  0.0f,  0.0f,  0.0f,  1.0f, 0.0f, 0.5f
+	};
 
 		//vertex array
 		unsigned int VAO;
@@ -62,13 +62,17 @@ int main(){
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-		//position
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6*sizeof(float), (void*)0);
+		// position
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 		glEnableVertexAttribArray(0);
 
-		//color
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6*sizeof(float), (void*)(3*sizeof(float)));
+		// color
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
 		glEnableVertexAttribArray(1);
+
+		// texture coords
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+		glEnableVertexAttribArray(2);
 
 
 		//Shader Enabling
@@ -157,7 +161,7 @@ int main(){
 	//todo: write and image loader myself and delete the fuck outta stbi
 
 	//generating texture
-	GLuint texture;
+	unsigned int texture;
 	glGenTextures (1, &texture);
 
 	//binding wtf
@@ -166,44 +170,45 @@ int main(){
 	//setting parameteri
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	//loading image
 	int width, height, channels;
-	unsigned char* image = stbi_load("test.dds", &width, &height, &channels, 4);
+	unsigned char* image = stbi_load("images.png", &width, &height, &channels, 0);
 
 	//natyagivanie
+	if(image){
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
 	glGenerateMipmap(GL_TEXTURE_2D);
-
+	}
+	else{
+		std::cout << "Failed to load texture retard" << std::endl;
+	}
 	//freeing
 	stbi_image_free(image);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 
-	//Applying texture
-	//----------------
-	
-
-
 	//main loop
 	//---------
 	while (!glfwWindowShouldClose(window)){
-		if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-			glfwSetWindowShouldClose(window, true);
+    	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        	glfwSetWindowShouldClose(window, true);
 
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+    	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    	glClear(GL_COLOR_BUFFER_BIT);
 
-		//doing some sneaky shader stuff
-		glBindVertexArray(VAO);
-		glUseProgram(shaderProgram);
+    	glUseProgram(shaderProgram);
 
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+    	glBindTexture(GL_TEXTURE_2D, texture);
 
-		glfwSwapBuffers(window);
-		glfwPollEvents();
-	}
+    	glBindVertexArray(VAO);
+    	glDrawArrays(GL_TRIANGLES, 0, 3);
+
+    	glfwSwapBuffers(window);
+    	glfwPollEvents();
+}
 		glfwTerminate();
 
 	return 0;

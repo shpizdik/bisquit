@@ -2,10 +2,14 @@
 
 layout (location = 0) in vec3 VertexPos;
 layout (location = 1) in vec3 VertexColor;
+layout (location = 2) in vec2 VertexTexCoord;
 
-out vec3 Color;
+out vec3 ourColor;
+out vec2 TexCoord;
 
-void main(){
-	gl_Position = vec4(VertexPos.xyz, 1.0);
-	Color = VertexColor;
+void main()
+{
+    gl_Position = vec4(VertexPos, 1.0);
+    ourColor = VertexColor;
+    TexCoord = VertexTexCoord;
 }
