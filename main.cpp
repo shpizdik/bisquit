@@ -45,10 +45,17 @@ int main(){
 	//making a triangle
 	//-----------------		
 	float vertices[] = {
-		 // positions		  // colors           //texture cords
-		 0.7f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
-		-0.7f, -0.5f,  0.0f,  0.0f,  1.0f,  0.0f, 0.0f, 0.0f,
-		 0.0f,  0.5f,  0.0f,  0.0f,  0.0f,  1.0f, 0.0f, 0.5f
+		 // positions		  // colors              //texture cords
+		 -0.5f,  0.5f,  0.0f,  1.0f,  0.0f, 0.0f, 0.0f, 0.0f,
+		 -0.5f, -0.5f,  0.0f,  0.0f,  1.0f, 0.0f, 0.0f, 1.0f,
+		  0.5f, -0.5f,  0.0f,  0.0f,  0.0f, 1.0f, 1.0f, 1.0f,
+		  0.5f,  0.5f,  0.0f,  0.0f,  0.0f, 0.0f, 1.0f, 0.0f
+
+	};
+
+	unsigned int indices[] = {
+		0, 1, 2,
+		0, 2, 3
 	};
 
 		//vertex array
@@ -61,6 +68,12 @@ int main(){
 		glGenBuffers(1, &VBO);
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+		//ebat togo rot
+		unsigned int EBO;
+		glGenBuffers(1, &EBO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 		// position
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
@@ -152,43 +165,22 @@ int main(){
 
 	//Texture parameters and loading
 	//------------------------------
-	GLfloat textureCords[] = {
-		0.0f, 0.0f,
-		1.0f, 0.0f, 
-		0.5f, 1.0f
-	};
 
 	//todo: write and image loader myself and delete the fuck outta stbi
 
-	//generating texture
-	unsigned int texture;
-	glGenTextures (1, &texture);
-
-	//binding wtf
-	glBindTexture(GL_TEXTURE_2D, texture);
-
-	//setting parameteri
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	//loading image
 	int width, height, channels;
-	unsigned char* image = stbi_load("images.png", &width, &height, &channels, 0);
-
-	//natyagivanie
-	if(image){
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-	glGenerateMipmap(GL_TEXTURE_2D);
-	}
+	unsigned char* data = stbi_load("images.png", &width, &height, &channels, 0);
+	unsigned int texture;
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	if(data){
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	} 
 	else{
-		std::cout << "Failed to load texture retard" << std::endl;
+		std::cout << "texture load failed" << std::endl;
 	}
-	//freeing
-	stbi_image_free(image);
-	glBindTexture(GL_TEXTURE_2D, 0);
-
+	stbi_image_free(data);
 
 	//main loop
 	//---------
@@ -206,9 +198,8 @@ int main(){
     	int uni_loc = glGetUniformLocation(shaderProgram, "scr_aspect");
     	glUniform1f(uni_loc, (float)PRM_HEIGHT / PRM_WIDTH); 
 
+    	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     	glBindTexture(GL_TEXTURE_2D, texture);
-
-    	glDrawArrays(GL_TRIANGLES, 0, 3);
 
     	glfwSwapBuffers(window);
     	glfwPollEvents();
