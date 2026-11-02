@@ -12,9 +12,6 @@ GLfloat vertices[] = {
 };
 
 GLuint VBO;
-glGenBuffers(1, &VBO);
-glBindBuffer(GL_ARRAY_BUFFER, VBO);
-glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 int main(){
 
@@ -40,6 +37,11 @@ int main(){
 
 	glViewport(0, 0, PRM_WIDTH, PRM_HEIGHT);
 
+
+	//BUFFER PROBLEM FIXED: moved here from after declaring VBO
+	glGenBuffers(1, &VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW); //copies user-specified vertex data into the buffer 
 
 
 	while (!glfwWindowShouldClose(window)){
