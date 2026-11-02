@@ -1,4 +1,8 @@
 #include <iostream>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <cstdlib>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -13,6 +17,19 @@ GLfloat vertices[] = {
 
 GLuint VBO; //will further be used to generate vertex buffers
 GLuint vertexShader; //shader object itself
+
+//reading shader
+GLchar vertexShaderSource;
+std::ifstream vertexShaderFile;
+
+vertexShaderFile.open("shader.vert");
+std::stringstream vertexShaderStream;
+vertexShaderStream << vertexShaderFile.rdbuf();
+vertexShaderFile.close();
+vertexShaderSource = vertexShaderStream.str();
+
+
+
 
 
 int main(){
@@ -52,6 +69,21 @@ int main(){
 	vertexShader = glCreateShader(GL_VERTEX_SHADER); //create shader context i suppose
 	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL); //shder source code loading
 	glCompileShader(vertexShader); //pretty straightforward i guess
+
+
+	//debug info
+	GLint success;
+	GLchar infoLog[512];
+	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+
+	if(!success){
+		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+	}
+
+
+
+
 
 
 	while (!glfwWindowShouldClose(window)){
