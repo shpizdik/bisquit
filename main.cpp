@@ -9,12 +9,16 @@ GLfloat vertices[] = {
 	-0.5f, 0.5f, 0.0f,
 	0.5f, 0.5f, 0.0f,
 	0.0f, -0.5f, 0.0f
-};
+}; //vertex coordinates specification
 
-GLuint VBO;
+GLuint VBO; //will further be used to generate vertex buffers
+GLuint vertexShader; //shader object itself
+
 
 int main(){
 
+	//GLFW window initialization and render context creation block
+	//------------------------------------------------------------------------------------
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -36,12 +40,18 @@ int main(){
 	}
 
 	glViewport(0, 0, PRM_WIDTH, PRM_HEIGHT);
+	//------------------------------------------------------------------------------------
 
 
 	//BUFFER PROBLEM FIXED: moved here from after declaring VBO
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW); //copies user-specified vertex data into the buffer 
+
+	//Shader compilation
+	vertexShader = glCreateShader(GL_VERTEX_SHADER); //create shader context i suppose
+	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL); //shder source code loading
+	glCompileShader(vertexShader); //pretty straightforward i guess
 
 
 	while (!glfwWindowShouldClose(window)){

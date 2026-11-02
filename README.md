@@ -8,7 +8,7 @@ Then just run debug.sh. It will make a build folder, build the project and run i
 
 CURRENT PROJECT FEATURES
 
-The executable should open a 720p window of plain purple color.
+The executable should open a 720p window of plain purple color. Also it has vertex shader code, but it's not working yet.
 
 CREDITS AND SOURCES
 
